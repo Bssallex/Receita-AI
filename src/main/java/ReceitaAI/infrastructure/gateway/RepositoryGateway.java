@@ -8,6 +8,8 @@ import ReceitaAI.infrastructure.persistence.ReceitaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class RepositoryGateway implements ReceitaGateway {
@@ -19,6 +21,14 @@ public class RepositoryGateway implements ReceitaGateway {
     public Receita salvarAlimento(Receita receita) {
         ReceitaEntity salvar = repository.save(mapper.toEntity(receita));
         return mapper.toDomain(salvar);
+    }
+
+    @Override
+    public List<Receita> listarAlimentos() {
+        List<ReceitaEntity> listar = repository.findAll();
+        return listar.stream()
+                .map(mapper::toDomain)
+                .toList();
     }
 
 
