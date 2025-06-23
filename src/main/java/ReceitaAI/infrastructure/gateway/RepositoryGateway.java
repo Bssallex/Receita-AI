@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -29,6 +30,20 @@ public class RepositoryGateway implements ReceitaGateway {
         return listar.stream()
                 .map(mapper::toDomain)
                 .toList();
+    }
+
+    @Override
+    public Optional<Receita> alterarAlimento(Long id, Receita receita) {
+        Optional<ReceitaEntity> verificar = repository.findById(id);
+        return verificar.map(v -> {
+            v.setId(v.getId());
+            v.setIngredientes(receita.ingredientes());
+            v.setQuantidade(receita.quantidade());
+            v.setValidade(receita.validade());
+
+            repository.save(v);
+            return mapper.toDomain(v);
+        });
     }
 
 

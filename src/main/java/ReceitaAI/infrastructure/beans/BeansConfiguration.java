@@ -1,10 +1,7 @@
 package ReceitaAI.infrastructure.beans;
 
 import ReceitaAI.core.gateway.ReceitaGateway;
-import ReceitaAI.core.usecases.ListarAlimentosImpl;
-import ReceitaAI.core.usecases.ListarAlimentosUseCase;
-import ReceitaAI.core.usecases.SalvarAlimentoImpl;
-import ReceitaAI.core.usecases.SalvarAlimentoUseCase;
+import ReceitaAI.core.usecases.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,5 +16,10 @@ public class BeansConfiguration {
     @Bean
     public ListarAlimentosUseCase listarAlimentosUseCase(ReceitaGateway gateway){
         return new ListarAlimentosImpl(gateway);
+    }
+
+    @Bean
+    public AlterarAlimentosUseCase alterarAlimentosUseCase(ReceitaGateway gateway){
+        return new AlterarAlimentosImpl(gateway);
     }
 }

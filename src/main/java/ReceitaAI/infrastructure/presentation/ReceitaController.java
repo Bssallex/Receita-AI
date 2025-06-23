@@ -1,9 +1,11 @@
 package ReceitaAI.infrastructure.presentation;
 
 import ReceitaAI.core.domain.Receita;
+import ReceitaAI.core.usecases.AlterarAlimentosUseCase;
 import ReceitaAI.core.usecases.ListarAlimentosUseCase;
 import ReceitaAI.core.usecases.SalvarAlimentoUseCase;
 import ReceitaAI.infrastructure.dtos.ReceitaDto;
+import ReceitaAI.infrastructure.exceptions.NotFoundExceptions;
 import ReceitaAI.infrastructure.mapper.ReceitaMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,13 +23,13 @@ public class ReceitaController {
 
     private final SalvarAlimentoUseCase salvarAlimentoUseCase;
     private final ListarAlimentosUseCase listarAlimentosUseCase;
+    private final AlterarAlimentosUseCase alterarAlimentosUseCase;
 
     private final ReceitaMapper mapper;
 
     @PostMapping
     public ResponseEntity<Map<String, Object>> salvarAlimento(@RequestBody ReceitaDto receita){
         Receita salvar = salvarAlimentoUseCase.execute(mapper.toDomain(receita));
-
         Map<String, Object> map = new HashMap<>();
         map.put("Mensagem", "Alimento armazenado");
         map.put("Alimento", mapper.toDto(salvar));
@@ -38,5 +40,12 @@ public class ReceitaController {
     public ResponseEntity<List<ReceitaDto>> listarAlimentos(){
         List<Receita> listar = listarAlimentosUseCase.execute();
         return ResponseEntity.ok(listar.stream().map(mapper::toDto).toList());
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<ReceitaDto> alterarAlimentos(@PathVariable Long id, @RequestBody ReceitaDto receitaDto){
+        Receita alterar = alterarAlimentosUseCase.execute(id, mapper.toDomain(receitaDto))
+                .orElseThrow(() -> new NotFoundExceptions("Não foi encontrado nenhum filme com esse id: " + id));
+        return ResponseEntity.ok(mapper.toDto(alterar));
     }
 }
