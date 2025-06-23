@@ -22,4 +22,9 @@ public class BeansConfiguration {
     public AlterarAlimentosUseCase alterarAlimentosUseCase(ReceitaGateway gateway){
         return new AlterarAlimentosImpl(gateway);
     }
+
+    @Bean
+    public DeletarAlimentoUseCase deletarAlimentoUseCase(ReceitaGateway gateway){
+        return new DeletarAlimentosImpl(gateway);
+    }
 }

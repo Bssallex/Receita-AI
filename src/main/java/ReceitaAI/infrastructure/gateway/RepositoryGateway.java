@@ -46,5 +46,14 @@ public class RepositoryGateway implements ReceitaGateway {
         });
     }
 
+    @Override
+    public Optional<Receita> deletarAlimentos(Long id) {
+        Optional<ReceitaEntity> verificar = repository.findById(id);
+        return verificar.map(d -> {
+            repository.delete(d);
+            return mapper.toDomain(d);
+        });
+    }
+
 
 }

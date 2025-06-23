@@ -2,6 +2,7 @@ package ReceitaAI.infrastructure.presentation;
 
 import ReceitaAI.core.domain.Receita;
 import ReceitaAI.core.usecases.AlterarAlimentosUseCase;
+import ReceitaAI.core.usecases.DeletarAlimentoUseCase;
 import ReceitaAI.core.usecases.ListarAlimentosUseCase;
 import ReceitaAI.core.usecases.SalvarAlimentoUseCase;
 import ReceitaAI.infrastructure.dtos.ReceitaDto;
@@ -24,6 +25,7 @@ public class ReceitaController {
     private final SalvarAlimentoUseCase salvarAlimentoUseCase;
     private final ListarAlimentosUseCase listarAlimentosUseCase;
     private final AlterarAlimentosUseCase alterarAlimentosUseCase;
+    private final DeletarAlimentoUseCase deletarAlimentoUseCase;
 
     private final ReceitaMapper mapper;
 
@@ -47,5 +49,12 @@ public class ReceitaController {
         Receita alterar = alterarAlimentosUseCase.execute(id, mapper.toDomain(receitaDto))
                 .orElseThrow(() -> new NotFoundExceptions("Não foi encontrado nenhum filme com esse id: " + id));
         return ResponseEntity.ok(mapper.toDto(alterar));
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<ReceitaDto> deletarAlimentos(@PathVariable Long id){
+        deletarAlimentoUseCase.execute(id)
+                .orElseThrow(() -> new NotFoundExceptions("Não foi encontrado nenhum filme com esse id: " + id));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

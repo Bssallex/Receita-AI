@@ -10,4 +10,5 @@ public interface ReceitaGateway {
     Receita salvarAlimento(Receita receita);
     List<Receita> listarAlimentos();
     Optional<Receita> alterarAlimento(Long id, Receita receita);
+    Optional<Receita> deletarAlimentos(Long id);
 }
